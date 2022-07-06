@@ -27,20 +27,20 @@ function HomePage() {
   const handleChange = (event, value) => {
     setPage(value);
   };
-  const search = {
-    name : "search" ,
-    variable : "query" ,
-    data : filters.searchQuery
-  }
-  const discover = {
-    name : "discover" ,
-    variable :" with_genres" ,
-    data : filters.genre
-  }
   useEffect(() => {
     const getFetchMovies= async () => {
       setLoading(true);
       try {
+        const search = {
+          name : "search" ,
+          variable : "query" ,
+          data : filters.searchQuery
+        }
+        const discover = {
+          name : "discover" ,
+          variable :" with_genres" ,
+          data : filters.genre
+        }
         const type = filters.searchQuery ? search : discover;
         const listsMovie = await apiService.get( `https://api.themoviedb.org/3/${type.name}/movie?api_key=${API_KEY}&page=${page}&${type.variable}=${type.data}`);
         setFetchMovies(listsMovie.data.results);
@@ -52,7 +52,7 @@ function HomePage() {
       setLoading(false);
     };
     getFetchMovies();
-  }, [page]);
+  }, [filters.searchQuery,filters.genre,page]);
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 2,flexDirection: {xs:"column", md:"row"}  }}>
