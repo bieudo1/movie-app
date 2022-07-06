@@ -10,11 +10,11 @@ import LoadingScreen from "../components/LoadingScreen";
 import Pagination from "../components/Pagination";
 
 function HomePage() {
-  const [products, setProducts] = useState([]);
+  const [fetchMovies , setFetchMovies ] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const defaultValues = {
-    genre: 0,
+    genre: null,
     searchQuery: ""
   };
   const methods = useForm({
@@ -22,23 +22,28 @@ function HomePage() {
   });
   const { watch } = methods;
   const filters = watch();
-  const filterProducts = applyFilter(products, filters);
   const API_KEY ="52b19eb0f0c5268812c35edb167f968d"
   const [page, setPage] = useState(1);
   const handleChange = (event, value) => {
     setPage(value);
   };
-  
+  const search = {
+    name : "search" ,
+    variable : "query" ,
+    data : filters.searchQuery
+  }
+  const discover = {
+    name : "discover" ,
+    variable :" with_genres" ,
+    data : filters.genre
+  }
   useEffect(() => {
-    const getProducts = async () => {
+    const getFetchMovies= async () => {
       setLoading(true);
       try {
-        const listsMovie = await apiService.get( `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page}`);
-        const listsSearch =  await apiService.get (`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${filters.searchQuery || "searchmovie" }&page=${page}`);
-      
-        const res =(listsSearch.data.total_pages !== 0 ? listsSearch : listsMovie );
-        console.log("b", res);
-        setProducts(res.data.results);
+        const type = filters.searchQuery ? search : discover;
+        const listsMovie = await apiService.get( `https://api.themoviedb.org/3/${type.name}/movie?api_key=${API_KEY}&page=${page}&${type.variable}=${type.data}`);
+        setFetchMovies(listsMovie.data.results);
         setError("");
       } catch (error) {
         console.log(error);
@@ -46,11 +51,11 @@ function HomePage() {
       }
       setLoading(false);
     };
-    getProducts();
-  }, [filters.searchQuery,page]);
+    getFetchMovies();
+  }, [page]);
 
   return (
-    <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
+    <Container sx={{ display: "flex", minHeight: "100vh", mt: 2,flexDirection: {xs:"column", md:"row"}  }}>
       <Stack>
         <FormProvider methods={methods}>
           <ProductFilter/>
@@ -76,7 +81,7 @@ function HomePage() {
               {error ? (
                 <Alert severity="error">{error}</Alert>
               ) : (
-                <ProductList products={filterProducts} />
+                <ProductList movies={fetchMovies} />
               )}
             </>
           )}
@@ -87,13 +92,4 @@ function HomePage() {
   );
 }
 
-function applyFilter(products, filters) {
-  let filteredProducts = products;
-  if (Number(filters.genre )!== 0) {
-    filteredProducts = products.filter((product) =>
-      product.genre_ids.includes(Number(filters.genre))
-    );
-  }
-  return filteredProducts;
-}
 export default HomePage;

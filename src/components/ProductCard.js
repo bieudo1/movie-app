@@ -1,41 +1,53 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+// import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import genres from "../db.json";
-// import { fCurrency } from "../utils";
+import apiService from "../app/apiService";
 
-function ProductCard({ product }) {
+
+function ProductCard({ movie }) {
+
+  const [genres, setGenres] = React.useState([]);
+
+  React.useEffect(() =>{
+    const getdata = async () =>{
+      try {
+        const red = await apiService.get (`https://api.themoviedb.org/3/genre/movie/list?api_key=52b19eb0f0c5268812c35edb167f968d`);
+        setGenres(red.data.genres);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getdata();
+  },[]);
   const navigate = useNavigate();
   return (
-    <Card onClick={() => navigate(`${product.id}`)}>
+    <Card onClick={() => navigate(`${movie.id}`)}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="278"
-          width = "185"
-          image={`https://image.tmdb.org/t/p/w185///${product.poster_path}`}
+          height="100%"
+          width = "100%"
+          image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
           alt="green iguana"
         />
-        <CardContent sx = {{height: "110"}}>
-          <Typography gutterBottom variant="body1" component="div" noWrap>
-            {product.title}
-          </Typography>
-          <Typography sx = {{display: 'flex'}}>
-					{product.genre_ids.map((id, index) => {
+        <Typography sx = {{fontSize: "80%"}}  gutterBottom variant="body1" component="h2">
+            {movie.title}
+        </Typography>
+        <Typography sx = {{display: 'flex',fontSize: "36%"}}>
+					{movie.genre_ids.map((id, index) => {
 						const item = genres.filter(genre => genre.id === id);
 						if (item.length > 0) 
 							return (
-								<li key={id}>{ item.shift().name}{index + 1 !== product.genre_ids.length && ', '}</li>
+								<li key={id}>{ item.shift().name}{index + 1 !== movie.genre_ids.length && ', '}</li>
 							)
 						return null;
 					})}
           
         </Typography>
-        </CardContent>
       </CardActionArea>
     </Card>
   );

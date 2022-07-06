@@ -16,7 +16,7 @@ function MainHeader() {
 
   return (
     <Box>
-      <AppBar sx = {{backgroundColor:'#121212'}} position="static">
+      <AppBar sx = {{backgroundColor:'#121212',width:"100%"}} position="static">
         <Toolbar variant="dense">
           <IconButton
             edge="start"

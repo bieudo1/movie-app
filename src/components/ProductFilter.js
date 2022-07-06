@@ -1,11 +1,11 @@
 import {  Stack, Typography } from "@mui/material";
 import { FRadioGroup } from "./form";
+// import { FButton } from "./form";
 
 // import genders from "../db.json"
 
 
-export const FILTER_GENDER_OPTIONS = [
- {value: 0, label: "ALL" },
+export const FILTER_GENRE_OPTIONS = [
  {value: 28, label: "Action" },
  {value: 12,label: "Adventure"},
  {value: 16,label: "Animation"},
@@ -31,14 +31,15 @@ export const FILTER_GENDER_OPTIONS = [
 
 function ProductFilter() {
   return (
-      <Stack spacing={1} sx={{ p: 3, width: 220 }}>
-        <Typography variant="h6" sx={{ fontWeight: 600,p: 3, width: 250 }}>
-        GENDER
+      <Stack spacing={1} sx={{ p: 3, width: "10%" }}>
+        <Typography variant="h6" sx={{ fontWeight: "2rem" }}>
+        GENRE
         </Typography>
         <FRadioGroup
           name="genre"
-          options={FILTER_GENDER_OPTIONS.map((item) => item.value)}
-          getOptionLabel={FILTER_GENDER_OPTIONS.map((item) => item.label)}
+          options={FILTER_GENRE_OPTIONS.map((item) => item.value)}
+          getOptionLabel={FILTER_GENRE_OPTIONS.map((item) => item.label)}
+          sx={{ width: 1 }}
         />
       </Stack>
   );
