@@ -38,11 +38,13 @@ function HomePage() {
         }
         const discover = {
           name : "discover" ,
-          variable :" with_genres" ,
+          variable :"with_genres" ,
           data : filters.genre
         }
         const type = filters.searchQuery ? search : discover;
         const listsMovie = await apiService.get( `https://api.themoviedb.org/3/${type.name}/movie?api_key=${API_KEY}&page=${page}&${type.variable}=${type.data}`);
+        console.log (listsMovie.data.results)
+        console.log(type.data)
         setFetchMovies(listsMovie.data.results);
         setError("");
       } catch (error) {

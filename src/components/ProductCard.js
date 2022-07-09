@@ -34,10 +34,10 @@ function ProductCard({ movie }) {
           image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
           alt="green iguana"
         />
-        <Typography sx = {{fontSize: "80%"}}  gutterBottom variant="body1" component="h2">
+        <Typography sx = {{fontSize: "0.8rem"}}  gutterBottom variant="body1" component="h2">
             {movie.title}
         </Typography>
-        <Typography sx = {{display: 'flex',fontSize: "36%"}}>
+        <Typography sx = {{display: 'flex',fontSize: "0.6rem"}}>
 					{movie.genre_ids.map((id, index) => {
 						const item = genres.filter(genre => genre.id === id);
 						if (item.length > 0) 
